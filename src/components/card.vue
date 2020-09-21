@@ -125,7 +125,7 @@ export default {
     right: .2vw;
     background-color: rgb(247, 247, 247);
     border-radius:10px;
-    border: 1px solid rgba(0, 0, 0, 0.299);
+    border: 1px solid rgba(0, 0, 0, 0.143);
     display: flex;
     flex-direction: column;
     justify-content:space-evenly;
@@ -147,7 +147,7 @@ export default {
     margin-right: .5vw;
 }
 .middle-line{
-    background-color: grey;
+    background-color: rgba(0, 0, 0, 0.143);
     height: 1px;
 }
 </style>

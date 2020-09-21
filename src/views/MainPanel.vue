@@ -3,13 +3,19 @@
     <div class="header">
         <div class="first"></div>
         <div class="logo"><img src="../assets/logo.png" alt="logo"></div>
-        <div class="username">{{user}}</div>
-        <div class="avatar"><img src="../assets/avatar.png" alt="avatar"></div>
+        <div class="user-menu clickedAvatar">
+            <div class="user">{{user}}</div>
+            <div class="avatar"><img src="../assets/avatar.png" alt="avatar"></div>
+            </div>
         <div class="last"></div>
     </div>
     <div class="info">
         <h4>Manage your to do list</h4>
         <p>click on checkbox or drag and drop to done</p>
+    </div>
+    <div class="dropdown">
+            <img src="../assets/logout.png" alt="">
+            <div>Log out</div>
     </div>
     <div class="todo">
         <div class="todo-header noselect" >
@@ -39,7 +45,7 @@ export default {
   },
   data:function(){
       return{
-        user: 'troll',
+        user: 'fade.sestan@gmail.com',
         empty: '',
         addNew: false,
       }
@@ -81,28 +87,38 @@ export default {
 }
 
 .header { 
-    grid-area: 1 / 1 / 1 / 6;
+    grid-area: 1 / 1 / 1 / 5;
     align-self: stretch;
     background-color: rgb(216, 215, 215);
     display: flex;
     flex-direction: row;
+    align-items: stretch;
+    width: 100%;
 }
 .first{
     flex-basis:20%;
 }
 .logo{
+    display: flex;
     align-self: center;
+    justify-self: start;
+    flex:20;
 }
 .logo > img{
     height: 35px;
 }
-.username{
+.user-menu{
+    display:flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    flex:auto;
+}
+.user{
     color: rgb(90, 90, 90);
     font-weight: bold;
-    text-align: right;
-    padding: 10px;
     align-self: center;
-    flex-grow: 1;
+    padding-right: 1vw;
 }
 .avatar{
     background-color:rgb(194, 192, 192);
@@ -111,13 +127,39 @@ export default {
     border: 1px solid rgb(142, 142, 142);
     padding:8px;
     align-self: center;
+    margin-right: 1vw;
 
 }
 .avatar > img {
     height: 20px;
 }
 .last{
-    flex-basis:20%;
+    flex-basis:20vw;
+}
+.dropdown{
+    grid-area: 2 / 3 / 2 / 4;
+    text-align: left;
+    justify-self: end;
+    display: flex;
+    flex-direction: row;
+    background-color: white;
+    padding-right:3vw;
+    padding-left:1vw;
+    -webkit-box-shadow: -5px 10px 20px -4px rgba(0,0,0,0.18);
+    -moz-box-shadow: -5px 10px 20px -4px rgba(0,0,0,0.18);
+    box-shadow: -5px 10px 20px -4px rgba(0,0,0,0.18);
+    border-radius: 5px;
+    cursor: pointer;
+}
+.dropdown > div{
+    padding: 1.5vh;
+}
+.dropdown > img{
+    align-self: center;
+    height: 20px;
+}
+.clickedAvatar {
+    background-color:rgb(202, 202, 202);
 }
 .info{
     grid-area: 2 / 2 / 2 / 5;
