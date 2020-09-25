@@ -3,7 +3,7 @@
     <div class="header">
         <div class="first"></div>
         <div class="logo"><img src="../assets/logo.png" alt="logo"></div>
-        <div class="user-menu clickedAvatar">
+        <div class="user-menu" v-bind:class="{ clickedAvatar: controllerAvatar }" @click="controllerAvatar = !controllerAvatar">
             <div class="user">{{user}}</div>
             <div class="avatar"><img src="../assets/avatar.png" alt="avatar"></div>
             </div>
@@ -13,30 +13,31 @@
         <h4>Manage your to do list</h4>
         <p>click on checkbox or drag and drop to done</p>
     </div>
-    <div class="dropdown">
+    <div class="dropdown" v-bind:class="{ show: controllerAvatar, hide: !controllerAvatar }" @click="logout">
             <img src="../assets/logout.png" alt="">
             <div>Log out</div>
     </div>
-    <div class="todo">
+    <div class="todo" @drop='onDrop($event,false)' @dragover.prevent @dragenter.prevent> 
         <div class="todo-header noselect" >
             To-do list
-            <div class="todo-adder noselect" @click="addNew = true">+</div>
+            <div class="todo-adder noselect" @click="controllerNewCard = true">+</div>
         </div>
-        <card class="troll" v-if="addNew" :text="empty" :insertion="addNew" @inserted="troll"/>
-        <card v-for="item in sort(items,false)" :key="item.label" :text="item.label" :done="item.done" :id="item.id"/>
+        <card v-if="controllerNewCard" :text="empty" :insertion="controllerNewCard" @inserted="ListenChildResponse"/>
+        <card v-for="item in sort(items,false)" :key="item.id" :id="item.id" :text="item.label" :done="item.done" :imgURL="item.imageURL" />
     </div>
-    <div class="done">
-        <div class="done-header noselect" >
+    <div class="done" @drop='onDrop($event,true)' @dragover.prevent @dragenter.prevent>
+        <div class="done-header noselect">
             Done list
-            <div class="done-remover noselect"><img src="../assets/delete all.png" alt="delete all"></div>
+            <div class="done-remover noselect"><img src="../assets/delete all.png" alt="delete all" @click="EmitdeleteALLDone('deleteDone',true)"></div>
         </div>
-        <card v-for="item in sort(items,true)" :key="item.label" :text="item.label" :done="item.done" :id="item.id"/>
-    </div> 
+        <card v-for="item in sort(items,true)" :key="item.id" :id="item.id" :text="item.label" :done="item.done" :imgURL="item.imageURL"/>
+    </div>
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
+import { EventBus } from '../main';
 import card from '../components/card';
 export default {
   name: 'MainPanel',
@@ -45,30 +46,53 @@ export default {
   },
   data:function(){
       return{
-        user: 'fade.sestan@gmail.com',
         empty: '',
-        addNew: false,
+        controllerNewCard: false,
+        controllerAvatar:false,
+        controllerDots:false,
+        controllerDragging: false,
       }
     },
   computed: {
       ...mapGetters({
-          items: 'updateData'
-      })
+          items: 'updateData',
+          user: 'activeUser'
+      }),
   },
   methods:{
+      ...mapActions({
+          callcheckboxMutation:'checkboxAction'
+      }),
       hide(){
-          this.addNew = false;
+          this.controllerNewCard = false;
       },
-      troll(value){
-          this.addNew = value;      
+      ListenChildResponse(value){
+          this.controllerNewCard = value;      
+      },
+      EmitdeleteALLDone(name,params){
+          EventBus.$emit(name, params);
+          params = false;
       },
       sort(arr,arg){
           let newArr=[]
           arr.forEach(element => {
               if(element.done === arg) newArr.push(element);
           });
-          return newArr;
-      }
+          return newArr.reverse();
+      },
+      //Drag and drop methods
+    onDrop (evt,state) {
+        const itemID = evt.dataTransfer.getData('itemID')
+        const item = this.items[itemID]
+        console.log(item)
+        this.callcheckboxMutation({
+            id:item.id,
+            done:state,
+        })
+    },
+    logout(){
+        this.$router.push('/login');
+    }
   } 
 }
 </script>
@@ -113,6 +137,7 @@ export default {
     justify-content: flex-end;
     align-items: center;
     flex:auto;
+    cursor:pointer;
 }
 .user{
     color: rgb(90, 90, 90);
@@ -150,6 +175,7 @@ export default {
     box-shadow: -5px 10px 20px -4px rgba(0,0,0,0.18);
     border-radius: 5px;
     cursor: pointer;
+    opacity: 0;
 }
 .dropdown > div{
     padding: 1.5vh;
@@ -189,13 +215,14 @@ export default {
     justify-content: space-between;
 }
 .todo-adder{
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 24px;  
     height: 24px;
     width: 26px;
     border-radius: 50%;
     background-color:rgb(194, 192, 192);
+    cursor: pointer;
 }
 .done { 
     grid-area: 3 / 4 / auto / 3;
@@ -224,6 +251,7 @@ export default {
     width: 26px;
     border-radius: 50%;
     background-color:rgb(194, 192, 192);
+    cursor: pointer;
 }
 .noselect {
   -webkit-touch-callout: none; /* iOS Safari */
@@ -233,5 +261,15 @@ export default {
         -ms-user-select: none; /* Internet Explorer/Edge */
             user-select: none; /* Non-prefixed version, currently
                                   supported by Chrome, Edge, Opera and Firefox */
+}
+.show{
+    opacity:1;
+}
+.hide{
+    opacity:0,
+}
+.drag{
+    box-shadow: inset 0px 0px 0px 2px grey;
+    background-color:rgba(196, 196, 196, 0.224)
 }
 </style>

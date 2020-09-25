@@ -1,19 +1,23 @@
 const helper = {
-    UserIndex: function(base){
+    ActiveUser: function(base){
         let index = undefined;
         base.forEach(element => {
             if(element.logged === true) index = base.indexOf(element);     
         });
         return index;
     },
-    IncrementIDs: function (base){
-        let index = this.UserIndex(base);
-        base[index].labels.forEach( element => {
-             element.id++;
-        });
-        }
+    findIndex: function (base,payload){
+        let index = this.ActiveUser(base);
+        return base[index].labels.findIndex(a => a.id === payload.id);
+    },
+    ActiveUserChange: function(base,payload){
+        base.forEach(element => {
+            if(element.logged) element.logged = false;
+        })
+        let x =base.findIndex(a=> a.username === payload.username);
+        base[x].logged = true;
     }
-
+    }
 export {
     helper
 }

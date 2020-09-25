@@ -1,27 +1,31 @@
 <template>
-  <div class="card">
+  <div class="card" draggable @dragstart='startDrag($event, idVal)'>
+    <div v-if="imageURL" class="imageSlot"><img :src="imageURL" alt="uploadedimg"></div>
+    <div class="cardSlot">
     <div v-if="done === false" class="checkbox"><img src="../assets/checkbox.png" alt="checkbot" @click="checkbox"></div>
     <div v-if="done === true" class="checkbox"><img src="../assets/checkbox active.png" alt="checkbot" @click="checkbox"></div>
-    <input @blur="interact()" v-model="textVal" type="text" class="textArea">
+    <input @blur="updating()" v-model="textVal" type="text" class="textArea" v-bind:class="{ notclickable: doneVal}">
     <div class="menuArea">
-        <img class="dots" src="../assets/dots.png" alt="dots">
-        <div class="dropdown">
-            <div>
-                <div class="image"><img src="../assets/picture.png" alt=""></div>
-                <div>Image</div>
+        <img class="dots" src="../assets/dots.png" alt="dots" v-bind:class="{show:optionsController}" @click="optionsController = !optionsController">
+        <div class="dropdown" v-bind:class="{show:optionsController, hide:!optionsController}">
+            <div v-if="!doneVal">
+                <label for="file"><div class="image"><img src="../assets/picture.png" alt="image">Image</div></label>
+                <input type="file" :id="idVal" @change="onFileChange" accept="image/*" class="inputfile">
             </div>
-            <span class="middle-line"></span>
-            <div>
-                <div class="delete"><img src="../assets/delete.png" alt=""></div>
+            <div v-if="!doneVal" class="middle-line"></div>
+            <div @click="deleteOne">
+                <div class="delete"><img src="../assets/delete.png" alt="deleteOne"></div>
                 <div>Delete</div>
             </div>
         </div>
+    </div>
     </div>
   </div>
 </template>
 
 <script>
-import{ mapActions} from "vuex";
+import{ mapActions, mapGetters } from "vuex";
+import { EventBus } from "../main";
 export default {
     props:{
         text: {
@@ -39,49 +43,124 @@ export default {
         insertion:{
             type:Boolean,
             require:true,
+        },
+        imgURL:{
+            type:String,
+            require:true,
         }
     },
     name: 'card',
     components:{
     },
     data:function(){
-      return{
-          textVal: this.text,
-          idVal: this.id,
-          addController: this.insertion,
-      }
+        return{
+            idVal: this.id,
+            textVal: this.text,
+            doneVal: this.done,
+            imageURL: this.imgURL,
+            deleteAllController: this.delete,  
+            addController: this.insertion,
+            optionsController: false,
+        }
+    },
+    computed:{
+        ...mapGetters({
+            items: 'updateData'
+        })
     },
     methods: {
         ...mapActions({
             callChangeMutation: 'changeAction',
             callInsertMutation: 'insertAction',
-            callCheckboxMutation: 'checkboxAction'
+            callCheckboxMutation: 'checkboxAction',
+            callDeleteOneMutation: 'deleteOneAction',
+            callDeleteDoneMutation: 'deleteDoneAction',
         }),
-        interact(){
-            if(this.addController == false) {
+        updating(){
+            if(this.addController) {this.callInsertMutation({
+                id: this.items.length,
+                label: this.textVal,
+                done: this.doneVal,
+                imageURL: null,
+            })
+            this.$emit('inserted',false);
+            }
+            else {
                 this.callChangeMutation({
-                    label: this.textVal,
-                    id: this.idVal})
-            } else {
-                this.callInsertMutation({
-                    label: this.textVal,
-                    id: 0,
-                    done: false,
+                id: this.idVal,
+                label: this.textVal,
+                done: this.doneVal,
+                imageURL: this.imageURL,
                 })
-                this.$emit('inserted',false)
             }
         },
         checkbox(){
             this.callCheckboxMutation({
                 id: this.idVal,
+                label: this.textVal,
+                done: this.doneVal,
+                imageURL: this.imageURL,
             });
-        }
+        },
+        deleteOne(){
+            this.callDeleteOneMutation({
+                id: this.idVal,
+                label: this.textVal,
+                done: this.doneVal,
+            }),
+            this.optionsController = false;
+        },
+        onFileChange(e){
+            const file = e.target.files[0]
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = e => {
+                this.imageURL = e.target.result
+                this.updating();
+                this.optionsController = false;
+            }
+        },
+        startDrag: (evt, item) => {
+        evt.dataTransfer.dropEffect = 'move'
+        evt.dataTransfer.effectAllowed = 'move'
+        evt.dataTransfer.setData('itemID', item)
+        },
+    },
+    created(){
+        EventBus.$on('deleteDone',value =>{
+            if((value == true)&&(this.doneVal===true)) {
+                this.callDeleteDoneMutation({
+                    label: this.textVal,
+                    done: this.doneVal,
+                })
+                this.updating();
+            }
+        });
     }
 }
 </script>
 
 <style scoped>
 .card{
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    margin:1.5vh;
+    border-radius: 10px;
+    background-color: whitesmoke;
+}
+.imageSlot{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.imageSlot > img{
+    height: 200px;
+    width: 100%;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+.cardSlot{
     display: flex;
     flex-direction: row;
     align-content: center;
@@ -121,7 +200,7 @@ export default {
     cursor: pointer;
     position:absolute;
     width: 20vh;
-    top:2vh;
+    top:2.5vh;
     right: .2vw;
     background-color: rgb(247, 247, 247);
     border-radius:10px;
@@ -138,16 +217,54 @@ export default {
     margin:1vh;
     display: flex;
     flex-direction: row;
-    align-content: center;
+    align-items: center;
     justify-content:flex-start;
     align-self:flex-start;
 }
 .dropdown > div > div > img{
     height: 20px;
     margin-right: .5vw;
+    padding-left: .5vw;
+}
+.image{
+    margin:1vh;
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    justify-content:flex-start;
+    align-self:flex-start; 
+    cursor: pointer;
+}
+.image > img{
+    height: 20px;
+    margin-right: .5vw;
+}
+.inputfile{
+    opacity: 0;
+    position: absolute;
+    z-index: 1;
+    right:0vh;
+    width: inherit;
+    height:50px;
+    margin-bottom: 5px;
+    cursor: pointer;
 }
 .middle-line{
     background-color: rgba(0, 0, 0, 0.143);
     height: 1px;
+    position: relative;
+    width: inherit;
+    top:-.55vh;
+    left:-.6vw;
+}
+.hide{
+    display: none;
+}
+.show{
+    display:unset;
+    opacity: 1;    
+}
+.notclickable{
+    pointer-events: none;
 }
 </style>
