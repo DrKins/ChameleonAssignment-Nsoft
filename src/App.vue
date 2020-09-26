@@ -17,7 +17,7 @@ export default {
   margin: 0;
 }
 body{
-  overflow:hidden;
+  overflow-x:hidden;
 }
 #app {
   font-family: 'Nunito Sans', sans-serif;
@@ -29,12 +29,6 @@ body{
   padding: 0;
   height: 100vh;
   width: 100vw;
-  background: linear-gradient(270deg, #ffffff, #e7e7e7);
-  background-size: 400% 400%;
-  -webkit-animation: gradientAnim 26s ease infinite;
-  -moz-animation: gradientAnim 26s ease infinite;
-  -o-animation: gradientAnim 26s ease infinite;
-  animation: gradientAnim 26s ease infinite;
 }
 
 @-webkit-keyframes gradientAnim {

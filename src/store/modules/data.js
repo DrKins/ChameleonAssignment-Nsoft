@@ -63,7 +63,6 @@ const mutations = {
         let x=undefined,index = helper.ActiveUser(state.base);
         x = state.base[index].labels.findIndex(a => a.id === payload.id);
         state.base[index].labels[x].label = payload.label;
-        state.base[index].labels[x].done = payload.done;
         state.base[index].labels[x].imageURL = payload.imageURL;
     },
     insertMutation: function(state,payload){
@@ -72,7 +71,7 @@ const mutations = {
     },
     checkboxMutation: function(state,payload){
         let x=undefined, index = helper.ActiveUser(state.base);
-        x = helper.findIndex(state.base,payload);
+        x = parseInt(helper.findIndex(state.base,payload));
         state.base[index].labels[x].done = !(state.base[index].labels[x].done);
     },
     deleteOneMutation: function(state,payload){

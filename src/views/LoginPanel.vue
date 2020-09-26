@@ -168,11 +168,38 @@ export default {
     margin-top:10px;
     height: 50px;
     outline: none;
+    -webkit-box-shadow: 0px 25px 20px -20px rgb(37, 22, 152);
+    -moz-box-shadow: 0px 25px 20px -20px rgb(37, 22, 152);
+    box-shadow: 0px 25px 20px -20px rgb(37, 22, 152); 
     border:none;
     color:whitesmoke;
     background-color:rgb(34, 34, 182);
-    -webkit-box-shadow: -5px 10px 33px -20px rgba(0,0,0,0.75);
-    -moz-box-shadow: -5px 10px 33px -20px rgba(0,0,0,0.75);
-    box-shadow: -5px 10px 33px -20px rgb(0, 0, 0);  
+}
+@media screen and (max-width:450px) {
+    .loginForm{
+    display:flex;
+    flex-direction: column;
+    width: 85%;
+    margin-top:25px;
+    }
+    .inputLabel {
+        position: absolute;
+        left: 11.5px;
+        height: 27px;
+        bottom: 0px;
+        pointer-events: none;
+        transition: ease-in-out 250ms;
+    }
+    .button{
+        margin-top:5vh;
+        height: 50px;
+        outline: none;
+        -webkit-box-shadow: 0px 25px 20px -20px rgb(37, 22, 152);
+        -moz-box-shadow: 0px 25px 20px -20px rgb(37, 22, 152);
+        box-shadow: 0px 25px 20px -20px rgb(37, 22, 152); 
+        border:none;
+        color:whitesmoke;
+        background-color:rgb(34, 34, 182);
+    }       
 }
 </style>

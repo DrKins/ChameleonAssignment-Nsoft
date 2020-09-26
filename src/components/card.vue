@@ -1,5 +1,5 @@
 <template>
-  <div class="card" draggable @dragstart='startDrag($event, idVal)'>
+  <div class="card" draggable @dragstart='startDrag($event, idVal)' @dragend="dragEnd">
     <div v-if="imageURL" class="imageSlot"><img :src="imageURL" alt="uploadedimg"></div>
     <div class="cardSlot">
     <div v-if="done === false" class="checkbox"><img src="../assets/checkbox.png" alt="checkbot" @click="checkbox"></div>
@@ -89,7 +89,6 @@ export default {
                 this.callChangeMutation({
                 id: this.idVal,
                 label: this.textVal,
-                done: this.doneVal,
                 imageURL: this.imageURL,
                 })
             }
@@ -120,11 +119,15 @@ export default {
                 this.optionsController = false;
             }
         },
-        startDrag: (evt, item) => {
+        startDrag(evt, item){
         evt.dataTransfer.dropEffect = 'move'
         evt.dataTransfer.effectAllowed = 'move'
         evt.dataTransfer.setData('itemID', item)
+        this.$emit('dragging',true,this.doneVal);
         },
+        dragEnd(){
+            this.$emit('dragging',false,this.doneVal);
+    },
     },
     created(){
         EventBus.$on('deleteDone',value =>{
