@@ -31,35 +31,40 @@ export default {
   name: 'LoginPanel',
   data:function(){
       return{
+          //Prototype storing user input.
           userInput:{
               email:'',
               password: '',
           },
+        // fields displayed on top of inputs that change depend on state of login.
         field1: 'Email',
         field2: 'Password',
+        // Controller of showing and hiding password.
         controllerVisibility: false,
       }
   },
   computed: {
+      // Getting all users from store to compare with login data.
       ...mapGetters({
           users: 'allusers'
       })
   },
   methods: {
+      //Calling login that changes active user or inserts new one.
       ...mapActions({
           callLogin: 'userAction'
       }),
+      //Method that shows and hides password input value.
       changeVisibility(){
           this.controllerVisibility = !this.controllerVisibility;
           if(this.controllerVisibility === true) this.$refs.passwordInput.type="text";
           else this.$refs.passwordInput.type="password";
       },
+      // Login method that checks if user is inside base. if not it creates new one.
       login(){
           this.users.forEach(element => {
               if(element.username === this.userInput.email){
-                  console.log("Email pass check.")
                   if(element.password === this.userInput.password){
-                        console.log("Password pass check");
                         this.callLogin({
                             new: false,
                             username: this.userInput.email,
@@ -70,9 +75,9 @@ export default {
                       this.$refs.passwordInput.style.borderColor="red";
                       this.userInput.password='';
                       this.field2='Please enter correct password';
-                      console.log("Password failed.");
                     }
               } else  {
+                    if((this.userInput.email ==='')||(this.userInput.email === null)) return;
                     this.callLogin({
                             new: true,
                             username: this.userInput.email,
@@ -165,7 +170,7 @@ export default {
     margin-left: 5px;
 }
 .button{
-    margin-top:10px;
+    margin-top:5vh;
     height: 50px;
     outline: none;
     -webkit-box-shadow: 0px 25px 20px -20px rgb(37, 22, 152);

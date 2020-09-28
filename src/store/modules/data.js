@@ -35,6 +35,7 @@ const getters = {
     },
     activeUser: (state) => {
         let x = helper.ActiveUser(state.base);
+        console.log(x);
         return state.base[x].username;
     },
 }
@@ -56,7 +57,7 @@ const actions = {
     },
     userAction: function({commit},payload){
         commit('userMutation',payload);
-    }
+    },
 }
 const mutations = {
     changeMutation: function(state,payload){
@@ -96,7 +97,7 @@ const mutations = {
         } else {
             helper.ActiveUserChange(state.base,payload);
         }
-    }     
+    },    
 }
 export default {
     state,

@@ -54,16 +54,22 @@ export default {
     },
     data:function(){
         return{
+            //Value of id prop
             idVal: this.id,
+            // Value of text prop
             textVal: this.text,
+            //Value of done prop
             doneVal: this.done,
+            //Value of img prop
             imageURL: this.imgURL,
-            deleteAllController: this.delete,  
+            //Value of insertion prop ( new card is being added )
             addController: this.insertion,
+            //Controller of dropdown options menu
             optionsController: false,
         }
     },
     computed:{
+        //Getter of all cards, needed just for lenght of array.
         ...mapGetters({
             items: 'updateData'
         })
@@ -76,6 +82,7 @@ export default {
             callDeleteOneMutation: 'deleteOneAction',
             callDeleteDoneMutation: 'deleteDoneAction',
         }),
+        //Method that updates and adds new card.
         updating(){
             if(this.addController) {this.callInsertMutation({
                 id: this.items.length,
@@ -93,6 +100,7 @@ export default {
                 })
             }
         },
+        //Method that mutates "done" value
         checkbox(){
             this.callCheckboxMutation({
                 id: this.idVal,
@@ -101,6 +109,7 @@ export default {
                 imageURL: this.imageURL,
             });
         },
+        //Method that is called when user wants to delete one card.
         deleteOne(){
             this.callDeleteOneMutation({
                 id: this.idVal,
@@ -109,6 +118,7 @@ export default {
             }),
             this.optionsController = false;
         },
+        //Method being called when we upload img. Method gets imageURL and calls updating() for card update.
         onFileChange(e){
             const file = e.target.files[0]
             const reader = new FileReader();
@@ -119,17 +129,20 @@ export default {
                 this.optionsController = false;
             }
         },
+        //Method called when card is being dragged by user. transfers Card ID.
         startDrag(evt, item){
         evt.dataTransfer.dropEffect = 'move'
         evt.dataTransfer.effectAllowed = 'move'
         evt.dataTransfer.setData('itemID', item)
         this.$emit('dragging',true,this.doneVal);
         },
+        //Method called when drag is finished so graphics can update on lists.vue
         dragEnd(){
             this.$emit('dragging',false,this.doneVal);
     },
     },
     created(){
+        //Listening for deleteDone emit from parent. Deleting all done cards.
         EventBus.$on('deleteDone',value =>{
             if((value == true)&&(this.doneVal===true)) {
                 this.callDeleteDoneMutation({
