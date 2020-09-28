@@ -18,6 +18,7 @@ export default {
 }
 body{
   overflow-x:hidden;
+  overscroll-behavior-y: contain;
 }
 #app {
   font-family: 'Nunito Sans', sans-serif;

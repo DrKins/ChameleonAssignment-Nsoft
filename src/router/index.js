@@ -7,7 +7,7 @@ Vue.use(VueRouter)
   {
     path: '/',
     name: 'Main',
-    component: () => import(/* webpackChunkName: "about" */ '../views/MainPanelTest.vue'),
+    component: () => import(/* webpackChunkName: "about" */ '../views/MainPanel.vue'),
   },
   {
     path:'/login',
