@@ -68,7 +68,7 @@ export default {
   methods:{
     //Method that pushes router to loginPanel.
     logout(){
-        this.$router.push('/login')
+        this.$router.push('/');
     },
     // Emiting to MainPanel when to activate shadow class to blackout screen behinde mobile dropdown menu.
     emitter(){

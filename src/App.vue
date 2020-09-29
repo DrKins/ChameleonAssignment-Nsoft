@@ -15,6 +15,7 @@ export default {
 @import url('https://fonts.googleapis.com/css2?family=Nunito+Sans&display=swap');
 *{
   margin: 0;
+  font-family: 'Nunito Sans', sans-serif;
 }
 body{
   overflow-x:hidden;

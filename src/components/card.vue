@@ -4,7 +4,7 @@
     <div class="cardSlot">
     <div v-if="done === false" class="checkbox"><img src="../assets/checkbox.png" alt="checkbot" @click="checkbox"></div>
     <div v-if="done === true" class="checkbox"><img src="../assets/checkbox active.png" alt="checkbot" @click="checkbox"></div>
-    <input @blur="updating()" v-model="textVal" type="text" class="textArea" v-bind:class="{ notclickable: doneVal}">
+    <input id="LabelInput" @blur="updating()" v-model="textVal" type="text" class="textArea" v-bind:class="{ notclickable: doneVal}" @click="setFocus">
     <div class="menuArea">
         <img class="dots" src="../assets/dots.png" alt="dots" v-bind:class="{show:optionsController}" @click="optionsController = !optionsController">
         <div class="dropdown" v-bind:class="{show:optionsController, hide:!optionsController}">
@@ -118,6 +118,10 @@ export default {
             }),
             this.optionsController = false;
         },
+        //Method that makes LabelInput element focused when clicked.
+        setFocus(){
+            document.getElementById("LabelInput").focus();
+        },
         //Method being called when we upload img. Method gets imageURL and calls updating() for card update.
         onFileChange(e){
             const file = e.target.files[0]
@@ -135,6 +139,7 @@ export default {
         evt.dataTransfer.effectAllowed = 'move'
         evt.dataTransfer.setData('itemID', item)
         this.$emit('dragging',true,this.doneVal);
+        this.$emit('idofDrag',item);
         },
         //Method called when drag is finished so graphics can update on lists.vue
         dragEnd(){
@@ -196,6 +201,7 @@ export default {
     outline: none;
     border:none;
     background-color: transparent;
+    font-size: 12pt;
 }
 .menuArea{
     position: relative;

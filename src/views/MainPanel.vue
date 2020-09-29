@@ -35,7 +35,6 @@ export default {
   computed: {
     ...mapGetters({
           items: 'updateData',
-          user: 'activeUser'
       }),
   },
   methods:{
@@ -47,7 +46,8 @@ export default {
     },
   },
   mounted(){
-      this.detectMobile();
+    this.checkUser();
+    this.detectMobile();
   }
 }
 </script>

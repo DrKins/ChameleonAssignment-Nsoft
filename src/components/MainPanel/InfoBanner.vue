@@ -30,7 +30,7 @@ export default {
     grid-area: 2 / 2 / 2 / 5;
     text-align: left;
     align-self: center;
-    font-size: 11pt;
+    font-size: 12pt;
 }
 .info > p {
     color: grey;

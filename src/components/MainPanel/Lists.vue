@@ -11,7 +11,7 @@
         </div>
         <!-- First card is card that is showed when you click on add New. Second one is v-for where all cards where being listed and sorted properly -->
         <card v-if="controllerNewCard" :text="empty" :insertion="controllerNewCard" @inserted="ListenChildResponse"/>
-        <card v-for="item in sort(items,false)" :key="item.id" :id="item.id" :text="item.label" :done="item.done" :imgURL="item.imageURL" @dragging="dragDisplay"/>
+        <card v-for="item in sort(items,false)" :key="item.id" :id="item.id" :text="item.label" :done="item.done" :imgURL="item.imageURL" @dragging="dragDisplay" @idofDrag="currentID"/>
     </div>
     <div class="done">
         <div v-if="controllerDragging.done" class="showAtdragging" @drop='onDrop($event,true)' @dragover.prevent @dragenter.prevent>
@@ -22,7 +22,7 @@
             Done list
             <div class="done-remover noselect"><img src="../../assets/delete all.png" alt="delete all" @click="EmitdeleteALLDone('deleteDone',true)"></div>
         </div>
-        <card v-for="item in sort(items,true)" :key="item.id" :id="item.id" :text="item.label" :done="item.done" :imgURL="item.imageURL" @dragging="dragDisplay"/>
+        <card v-for="item in sort(items,true)" :key="item.id" :id="item.id" :text="item.label" :done="item.done" :imgURL="item.imageURL" @dragging="dragDisplay" @idofDrag="currentID"/>
     </div>
   </div>
 </template>
@@ -45,6 +45,7 @@ export default {
             done: false,
         },
         mobile:false,
+        idOfDrag: -1,
       }
     },
   computed: {
@@ -82,7 +83,8 @@ export default {
       //Drag and drop methods.
       //OnDrop method that calls mutation of checkbox and hides drop area.
     onDrop (evt,state) {
-        const itemID = evt.dataTransfer.getData('itemID')
+        let itemID = evt.dataTransfer.getData('itemID')
+        if(!itemID) itemID = this.idOfDrag;
         let index = this.items.findIndex(a=> a.id == parseInt(itemID));
         let item = this.items[index];
         this.callcheckboxMutation({
@@ -102,6 +104,9 @@ export default {
             this.controllerDragging.todo = val1;
         }else this.controllerDragging.done = val1;
     },
+    currentID(val){
+        this.idOfDrag = val;
+    }
   },
 }
 </script>
@@ -249,6 +254,22 @@ export default {
     }
     .todo, .done{
         margin-bottom: 10px;
+    }
+    .showAtdragging{
+        border-radius: 10px;
+        margin:10px;
+        height: 75px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background-color:rgba(47, 47, 47, 0.571);
+        box-shadow: inset 0px 0px 0px 2px black;
+    }
+    .showAtdragging > div{
+        position: relative;
+        font-size: 15pt;
+        color:black;
     }
 }
 </style>

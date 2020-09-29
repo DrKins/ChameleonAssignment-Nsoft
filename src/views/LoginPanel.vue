@@ -70,7 +70,7 @@ export default {
                             username: this.userInput.email,
                             password: this.userInput.password,
                         })
-                        this.$router.push('/');
+                        this.$router.push('/panel');
                   } else {
                       this.$refs.passwordInput.style.borderColor="red";
                       this.userInput.password='';
@@ -83,7 +83,7 @@ export default {
                             username: this.userInput.email,
                             password: this.userInput.password,
                         });
-                        this.$router.push('/');
+                        this.$router.push('/panel');
                 }
           });
       },

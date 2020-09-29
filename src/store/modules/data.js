@@ -2,9 +2,9 @@ import { helper } from '../helper'
 const state = {
     base: [
         {
-            username: "fade.sestan@gmail.com",
+            username: "example@gmail.com",
             password: "1234",
-            logged: true,
+            logged: false,
             labels:[
                 {
                     id: 0,
@@ -14,7 +14,7 @@ const state = {
                 },
                 {   
                     id:1,
-                    label:"Let's fucking go",
+                    label:"Let's go party",
                     done: true,
                     imageURL: null
                 }
@@ -35,7 +35,6 @@ const getters = {
     },
     activeUser: (state) => {
         let x = helper.ActiveUser(state.base);
-        console.log(x);
         return state.base[x].username;
     },
 }
