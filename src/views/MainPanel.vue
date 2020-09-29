@@ -46,7 +46,6 @@ export default {
     },
   },
   mounted(){
-    this.checkUser();
     this.detectMobile();
   }
 }

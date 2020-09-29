@@ -4,7 +4,7 @@ const state = {
         {
             username: "example@gmail.com",
             password: "1234",
-            logged: false,
+            logged: true,
             labels:[
                 {
                     id: 0,

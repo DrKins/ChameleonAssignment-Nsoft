@@ -10,7 +10,7 @@
         <div class="dropdown" v-bind:class="{show:optionsController, hide:!optionsController}">
             <div v-if="!doneVal">
                 <label for="file"><div class="image"><img src="../assets/picture.png" alt="image">Image</div></label>
-                <input type="file" :id="idVal" @change="onFileChange" accept="image/*" class="inputfile">
+                <input type="file" :id="idVal" @change="onFileChange" accept="image/*" class="inputfile" @click="uploadPhotoMobile">
             </div>
             <div v-if="!doneVal" class="middle-line"></div>
             <div @click="deleteOne">
@@ -121,6 +121,10 @@ export default {
         //Method that makes LabelInput element focused when clicked.
         setFocus(){
             document.getElementById("LabelInput").focus();
+        },
+        //Method made for uploading photos on phone.
+        uploadPhotoMobile(){
+            document.getElementById(this.idVal).click()
         },
         //Method being called when we upload img. Method gets imageURL and calls updating() for card update.
         onFileChange(e){

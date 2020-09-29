@@ -15,9 +15,9 @@
           <div class="options">
             <div class="checkbox">
                 <input class="checkbox" type="checkbox">
-                    <label class="checkboxLabel"><span>Remeber me</span></label>
+                    <label class="checkboxLabel"><span>Remember me</span></label>
             </div>
-            <div class="forget">Forget your password?</div>
+            <div class="forget">Forgot your password?</div>
           </div>
           <button class="button" type="button" @click="login()">Login</button>
       </form>
