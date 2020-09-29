@@ -14,6 +14,7 @@ const helper = {
         },
         //Function that updates user.logged status when loggin in.
         ActiveUserChange: function(base,payload){
+            base.forEach(element => { element.logged = false})
             let x = base.findIndex(a=> a.username === payload.username);
             base[x].logged = true;
         },
