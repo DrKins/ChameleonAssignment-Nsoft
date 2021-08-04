@@ -2,10 +2,6 @@
 Chameleon Assignment is my NSoft Task application. It is simple,intuitive todo application made for everyone. Application has responsive design and drag and drop functionality.
 Feel free to test it out!
 
-Demo link: https://sparkteam3.000webhostapp.com/
-
-Demo username: example@gmail.com 
-Demo password: 1234
 
 ## Getting Started
 After cloning repository you will need to install all node modules.
