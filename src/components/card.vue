@@ -158,7 +158,6 @@ export default {
                     label: this.textVal,
                     done: this.doneVal,
                 })
-                this.updating();
             }
         });
     }
